@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nguyễn Lan Anh</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 15px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 400px;
+      }
+
+      label {
+        display: block;
+        font-size: 16px;
+        color: #444;
+        margin-bottom: 6px;
+      }
+
+      textarea,
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      textarea {
+        height: 45px;
+        resize: vertical;
+      }
+
+      input {
+        height: 35px;
+      }
+
+      textarea:focus,
+      input:focus {
+        border: 2px solid #b0bec5;
+      }
+
+      .counter {
+        color: #d9534f;
+        font-size: 16px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+      }
+
+      .item {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Textarea -->
+      <div class="item">
+        <label for="textarea">Textarea</label>
+
+        <textarea id="textarea" maxlength="140" placeholder="jQueryScript.Net"></textarea>
+
+        <div class="counter">
+          Max
+          <span id="count-textarea">0</span>
+          / 140
+        </div>
+      </div>
+
+      <!-- Input Field -->
+      <div class="item">
+        <label for="input-field">Input Field</label>
+
+        <input type="text" id="input-field" maxlength="20" placeholder="jQueryScript.Net" />
+
+        <div class="counter">
+          Maximum
+          <span id="count-input">0</span>
+          / 20
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Lấy các phần tử HTML
+      const textarea = document.querySelector("#textarea");
+      const input = document.querySelector("#input-field");
+
+      const countTextarea = document.querySelector("#count-textarea");
+      const countInput = document.querySelector("#count-input");
+
+      // Đếm ký tự trong Textarea
+      textarea.addEventListener("input", () => {
+        countTextarea.textContent = textarea.value.length;
+      });
+
+      // Đếm ký tự trong Input Field
+      input.addEventListener("input", () => {
+        countInput.textContent = input.value.length;
+      });
+    </script>
+  </body>
+</html>
