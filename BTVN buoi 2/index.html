@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>BTVN buổi 2</title>
+
+    <style>
+      body {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 16px;
+        line-height: 1.6;
+      }
+
+      .demo-box {
+        border: 1px solid #ddd;
+        padding: 12px;
+      }
+
+      .demo-box input {
+        padding: 6px 8px;
+        width: 200px;
+        max-width: 100%;
+      }
+
+      #ds {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0 0;
+      }
+
+      #ds li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        padding: 8px 0;
+        cursor: pointer;
+      }
+
+      #ds li.da-mua span {
+        text-decoration: line-through;
+      }
+
+      #ds button {
+        cursor: pointer;
+      }
+
+      #thong-ke {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>DANH SÁCH ĐI CHỢ</h1>
+    <div class="demo-box">
+      <form id="form">
+        <input id="o-ten" type="text" placeholder="Nhập tên món + Enter" autocomplete="off" />
+        <button type="submit">Thêm món</button>
+      </form>
+
+      <!-- Hiển thị số món chưa mua -->
+      <div id="thong-ke">Còn 0/0 món chưa mua</div>
+
+      <!-- Danh sách -->
+      <ul id="ds"></ul>
+    </div>
+
+    <script>
+      const form = document.querySelector("#form");
+      const oTen = document.querySelector("#o-ten");
+      const ds = document.querySelector("#ds");
+      const thongKe = document.querySelector("#thong-ke");
+
+      const danhSachLuu = localStorage.getItem("danhSachDiCho");
+
+      let danhSach = danhSachLuu ? JSON.parse(danhSachLuu) : [];
+
+      function luuDanhSach() {
+        localStorage.setItem("danhSachDiCho", JSON.stringify(danhSach));
+      }
+
+      function capNhatThongKe() {
+        const tong = danhSach.length;
+        const chuaMua = danhSach.filter((mon) => !mon.daMua).length;
+        thongKe.textContent = `Còn ${chuaMua}/${tong} món chưa mua`;
+      }
+
+      function hienThiDanhSach() {
+        ds.innerHTML = "";
+        danhSach.forEach((mon, index) => {
+          const li = document.createElement("li");
+          if (mon.daMua) {
+            li.classList.add("da-mua");
+          }
+
+          const span = document.createElement("span");
+          span.textContent = mon.ten;
+          li.append(span);
+          let timer;
+
+          li.addEventListener("click", () => {
+            timer = setTimeout(() => {
+              mon.daMua = !mon.daMua;
+              luuDanhSach();
+              hienThiDanhSach();
+            }, 250);
+          });
+
+          li.addEventListener("dblclick", () => {
+            clearTimeout(timer);
+            danhSach.splice(index, 1);
+            luuDanhSach();
+            hienThiDanhSach();
+          });
+          ds.append(li);
+        });
+        capNhatThongKe();
+      }
+      form.addEventListener("submit", (e) => {
+        e.preventDefault(); // khong de trang tai lai
+        const ten = oTen.value.trim();
+
+        // Không nhận tên rỗng
+        if (ten === "") {
+          return;
+        }
+
+        // Tạo món mới
+        const monMoi = {
+          ten: ten,
+          daMua: false,
+        };
+
+        // Thêm vào danh sách
+        danhSach.push(monMoi);
+
+        // Lưu vào localStorage
+        luuDanhSach();
+
+        // Hiển thị danh sách
+        hienThiDanhSach();
+
+        // Xóa ô nhập
+        oTen.value = "";
+
+        // Đưa con trỏ về ô nhập
+        oTen.focus();
+      });
+      hienThiDanhSach();
+    </script>
+  </body>
+</html>
