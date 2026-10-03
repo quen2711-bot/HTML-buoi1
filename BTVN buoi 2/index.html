@@ -53,7 +53,6 @@
       }
     </style>
   </head>
-
   <body>
     <h1>DANH SÁCH ĐI CHỢ</h1>
     <div class="demo-box">
@@ -61,11 +60,7 @@
         <input id="o-ten" type="text" placeholder="Nhập tên món + Enter" autocomplete="off" />
         <button type="submit">Thêm món</button>
       </form>
-
-      <!-- Hiển thị số món chưa mua -->
       <div id="thong-ke">Còn 0/0 món chưa mua</div>
-
-      <!-- Danh sách -->
       <ul id="ds"></ul>
     </div>
 
@@ -75,13 +70,7 @@
       const ds = document.querySelector("#ds");
       const thongKe = document.querySelector("#thong-ke");
 
-      const danhSachLuu = localStorage.getItem("danhSachDiCho");
-
-      let danhSach = danhSachLuu ? JSON.parse(danhSachLuu) : [];
-
-      function luuDanhSach() {
-        localStorage.setItem("danhSachDiCho", JSON.stringify(danhSach));
-      }
+      let danhSach = [];
 
       function capNhatThongKe() {
         const tong = danhSach.length;
@@ -105,7 +94,6 @@
           li.addEventListener("click", () => {
             timer = setTimeout(() => {
               mon.daMua = !mon.daMua;
-              luuDanhSach();
               hienThiDanhSach();
             }, 250);
           });
@@ -113,33 +101,26 @@
           li.addEventListener("dblclick", () => {
             clearTimeout(timer);
             danhSach.splice(index, 1);
-            luuDanhSach();
             hienThiDanhSach();
           });
           ds.append(li);
         });
+
         capNhatThongKe();
       }
-      form.addEventListener("submit", (e) => {
-        e.preventDefault(); // khong de trang tai lai
-        const ten = oTen.value.trim();
 
-        // Không nhận tên rỗng
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const ten = oTen.value.trim();
         if (ten === "") {
           return;
         }
 
         // Tạo món mới
-        const monMoi = {
-          ten: ten,
-          daMua: false,
-        };
+        const monMoi = { ten: ten, daMua: false };
 
         // Thêm vào danh sách
         danhSach.push(monMoi);
-
-        // Lưu vào localStorage
-        luuDanhSach();
 
         // Hiển thị danh sách
         hienThiDanhSach();
@@ -150,7 +131,6 @@
         // Đưa con trỏ về ô nhập
         oTen.focus();
       });
-      hienThiDanhSach();
     </script>
   </body>
 </html>
